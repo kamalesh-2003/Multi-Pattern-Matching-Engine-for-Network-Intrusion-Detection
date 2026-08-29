@@ -60,9 +60,6 @@ public:
     // `out_appended` (cleared first).
     void accept(const Frame& f, std::string& out_appended);
 
-    // Number of tracked streams (for tests).
-    std::size_t stream_count() const { return streams_.size(); }
-
 private:
     struct Stream {
         std::uint32_t next_seq = 0;

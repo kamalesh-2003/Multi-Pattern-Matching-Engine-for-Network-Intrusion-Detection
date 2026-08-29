@@ -19,7 +19,6 @@
 
 #include <atomic>
 #include <cstddef>
-#include <new>
 #include <vector>
 
 namespace mpm {

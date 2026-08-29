@@ -1,14 +1,10 @@
-// Aho-Corasick multi-pattern automaton: the production engine.
+// Aho-Corasick multi-pattern automaton.
 //
-// After build(), the goto table is fully deterministic: every (state, byte)
-// pair has a defined next state, so scanning is a branch-free table walk with
-// one lookup per input byte. Output lists are flattened and per-state failure
-// outputs are propagated, so all patterns ending at a position are reported
-// without following suffix links at scan time.
-//
-// The scan is a *streaming* scan: it threads a caller-held State across calls,
-// so feeding the input in one block or split at arbitrary boundaries yields an
-// identical match set (verified by the streaming-equivalence test).
+// build() produces a fully deterministic goto table (every state/byte pair has a
+// next state), so scan() is one table lookup per input byte. Failure outputs are
+// propagated into each state, so all patterns ending at a position are reported
+// without walking suffix links. scan() is streaming: it threads a caller-held
+// State across calls, so any chunking of the input yields the same matches.
 #ifndef MPM_AHO_CORASICK_HPP
 #define MPM_AHO_CORASICK_HPP
 

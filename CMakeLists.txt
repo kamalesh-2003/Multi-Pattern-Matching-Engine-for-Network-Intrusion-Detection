@@ -44,6 +44,10 @@ set_source_files_properties(src/simd/prefilter_avx2.cpp  PROPERTIES COMPILE_OPTI
 
 find_package(Threads REQUIRED)
 
+# ---- Applications ----------------------------------------------------------
+add_executable(nids apps/nids.cpp)
+target_link_libraries(nids PRIVATE mpm mpm_flags Threads::Threads)
+
 # ---- Benchmark -------------------------------------------------------------
 add_executable(bench bench/bench.cpp)
 target_link_libraries(bench PRIVATE mpm mpm_flags Threads::Threads)
@@ -51,7 +55,8 @@ target_link_libraries(bench PRIVATE mpm mpm_flags Threads::Threads)
 # ---- Tests -----------------------------------------------------------------
 enable_testing()
 
-set(MPM_TESTS test_basic test_differential test_streaming test_prefilter test_spsc test_packet)
+set(MPM_TESTS test_basic test_differential test_streaming test_prefilter
+              test_spsc test_packet test_pipeline)
 foreach(t ${MPM_TESTS})
   add_executable(${t} tests/${t}.cpp)
   target_include_directories(${t} PRIVATE ${CMAKE_SOURCE_DIR}/tests)

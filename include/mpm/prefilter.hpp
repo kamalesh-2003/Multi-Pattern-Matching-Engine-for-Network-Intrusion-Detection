@@ -1,19 +1,11 @@
-// SIMD byte-set prefilter.
+// SIMD byte-set prefilter: find the first buffer position whose byte is in a
+// given set, letting a NIDS skip runs that cannot begin any pattern.
 //
-// Given a set of "interesting" bytes (e.g. the first byte of every pattern),
-// find the first position in a buffer whose byte is in the set. A NIDS uses
-// this to skip long runs of input that cannot begin any pattern.
-//
-// The set is stored two ways:
-//   * `table`  : a flat 256-entry membership array used by the scalar path.
-//   * lut_a/lut_b : two 16-byte low-nibble lookup tables that let the SSSE3+
-//                   `pshufb` trick test 16/32 bytes at once, exactly, for an
-//                   arbitrary 256-element set (see the .cpp files).
-//
-// Runtime CPUID dispatch (via __builtin_cpu_supports) picks AVX2 > SSE4.2 >
-// scalar on first use. The per-tier entry points are also exported directly so
-// the differential test can compare every compiled tier against the scalar
-// reference on the same inputs.
+// The set is stored twice: `table` (flat 256-entry array) for the scalar path,
+// and lut_a/lut_b (two 16-byte low-nibble tables) for the pshufb membership
+// trick used by the SIMD paths (see src/simd/*.cpp). Runtime CPUID dispatch
+// picks AVX2 > SSE4.2 > scalar; each tier is also exported directly so the
+// differential test can compare them on identical inputs.
 #ifndef MPM_PREFILTER_HPP
 #define MPM_PREFILTER_HPP
 
