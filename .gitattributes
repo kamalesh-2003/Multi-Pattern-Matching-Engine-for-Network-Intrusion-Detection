@@ -1,0 +1,4 @@
+# Shell scripts run inside the Linux container: keep LF endings on all platforms.
+*.sh text eol=lf
+scripts/* text eol=lf
+docker/Dockerfile.dev text eol=lf
