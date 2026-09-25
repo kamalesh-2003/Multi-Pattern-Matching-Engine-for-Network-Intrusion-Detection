@@ -1,0 +1,8 @@
+/build/
+/build-*/
+*.o
+*.obj
+*.a
+compile_commands.json
+bench/results/*.json
+!bench/results/.gitkeep

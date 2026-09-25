@@ -1,0 +1,25 @@
+# Development / CI toolchain image for the multi-pattern matching engine.
+# Provides GCC 13 and Clang 17 on Linux x86-64, matching the project's target.
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        cmake \
+        ninja-build \
+        make \
+        gcc-13 g++-13 \
+        clang-17 lld-17 \
+        libc++-17-dev libc++abi-17-dev \
+        libclang-rt-17-dev \
+        gdb \
+    && rm -rf /var/lib/apt/lists/*
+
+# Stable, unversioned symlinks so CMake toolchain files stay simple.
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 \
+        --slave /usr/bin/g++ g++ /usr/bin/g++-13 \
+    && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-17 100 \
+        --slave /usr/bin/clang++ clang++ /usr/bin/clang++-17
+
+WORKDIR /work
